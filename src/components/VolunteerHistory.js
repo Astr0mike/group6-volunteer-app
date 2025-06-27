@@ -8,7 +8,7 @@ const VolunteerHistory = () => {
         {/*sample data*/},
     ];
 
-    return (
+    return ( // HTML for webpage
         <div className="volunteer-history">
             <h1>Volunteer History</h1>
             <p>This is where the volunteer history will go.</p>

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import VolunteerHistory from './components/VolunteerHistory';
 import Home from './components/Home';
+import './App.css';
 
 function App() {
   return (

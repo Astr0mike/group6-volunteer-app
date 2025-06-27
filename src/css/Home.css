@@ -1,5 +1,14 @@
 .home {
-    padding: 10px;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
+    padding: 40px 20px;
+    background-color: white; /* optional: gives your content a box look */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* optional */
+    border-radius: 8px;
+}
+
+.home h1 {
+    text-align: left;
+    margin-left: auto;
+    padding-left: 20px;
 }
