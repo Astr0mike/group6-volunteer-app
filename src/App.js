@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Notifications from "./components/Notifications";
+import VolunteerMatching from "./components/VolunteerMatching";
 import VolunteerHistory from './components/VolunteerHistory';
 import Home from './components/Home';
 import './App.css';
@@ -16,6 +18,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/volunteer-history" element={<VolunteerHistory />} />
+              <Route path="/volunteer-matching" element={<VolunteerMatching />} />
+              <Route path="/notifications" element={<Notifications />} />
             </Routes>
         </div>
       </Router>
