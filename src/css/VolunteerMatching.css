@@ -1,0 +1,97 @@
+.volunteer-matching { /* entire volunteer matching container */
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: left;
+    font-family: "PT Sans Narrow", sans-serif;
+}
+
+.volunteer-matching h1 { /* Match volunteers with current opportunities */
+    text-align: center;
+    margin-bottom: 25px;
+    margin-left: auto;
+    border-left: black solid 5px;
+}
+
+.matching-filters {
+    background-color: lightgray;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+}
+
+.matching-results {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.volunteer-list,
+.opportunity-list {
+    flex: 1;
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 200px;
+}
+
+.volunteer-list ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.volunteer-list li {
+    margin-bottom: 10px;
+}
+
+.volunteer-list label {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+}
+
+.volunteer-list h3,
+.opportunity-list h3 {
+    margin-top: 0;
+}
+
+.filter { /* */
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-right: 10px;
+    color: #333;
+}
+
+.notify-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.notify-btn { /* notification button to send volunteers alert */
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.notify-btn:hover { /* color notify button changes too when hovered over */
+    background-color: #218838;
+}
+
+.notify-btn:disabled { /* color when no selection is made and button is unclickable */
+    background-color: #aaa;
+    cursor: not-allowed;
+}
