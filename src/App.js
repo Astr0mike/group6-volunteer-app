@@ -4,7 +4,7 @@ import Notifications from "./components/Notifications";
 import VolunteerMatching from "./components/VolunteerMatching";
 import VolunteerHistory from './components/VolunteerHistory';
 import Home from './components/Home';
-import EventManagementForm "./components/EventManagementForm";
+import EventManagementForm from "./components/EventManagementForm";
 import './App.css';
 
 function App() {
