@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import '../css/EventManagementForm.css'
 
 export default function EventManagementForm() {
   const [formData, setFormData] = useState({
