@@ -40,7 +40,14 @@ function EventManagementForm() {
     if (!formData.location.trim()) newErrors.location = "Location is required";
     if (formData.requiredSkills.length === 0) newErrors.requiredSkills = "Select at least one skill";
     if (!formData.urgency) newErrors.urgency = "Select urgency";
-    if (!formData.eventDate) newErrors.eventDate = "Pick a date";
+    if (!formData.eventDate) {
+      newErrors.eventDate = "Pick a date";
+    } else {
+      const today = new Date();
+      const selectedDate = new Date(formData.eventDate);
+      if (selectedDate < today.setHours(0, 0, 0, 0)) {
+      }
+    }
     return newErrors;
   };
 
@@ -56,90 +63,95 @@ function EventManagementForm() {
     }
   };
 
+  const todayDate = new Date().toISOString().split("T")[0];
+
   return (
-    <div>
-      <h2>Event Management Form</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Event Name *</label>
-          <input
-            type="text"
-            name="eventName"
-            maxLength="100"
-            value={formData.eventName}
-            onChange={handleChange}
-          />
-          {errors.eventName && <p>{errors.eventName}</p>}
-        </div>
+    <div style={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
+      <div>
+        <h2>Event Management Form</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Event Name *</label>
+            <input
+              type="text"
+              name="eventName"
+              maxLength="100"
+              value={formData.eventName}
+              onChange={handleChange}
+            />
+            {errors.eventName && <p>{errors.eventName}</p>}
+          </div>
 
-        <div>
-          <label>Event Description *</label>
-          <textarea
-            name="eventDescription"
-            value={formData.eventDescription}
-            onChange={handleChange}
-          ></textarea>
-          {errors.eventDescription && <p>{errors.eventDescription}</p>}
-        </div>
+          <div>
+            <label>Event Description *</label>
+            <textarea
+              name="eventDescription"
+              value={formData.eventDescription}
+              onChange={handleChange}
+            ></textarea>
+            {errors.eventDescription && <p>{errors.eventDescription}</p>}
+          </div>
 
-        <div>
-          <label>Location *</label>
-          <textarea
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-          ></textarea>
-          {errors.location && <p>{errors.location}</p>}
-        </div>
+          <div>
+            <label>Location *</label>
+            <textarea
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+            ></textarea>
+            {errors.location && <p>{errors.location}</p>}
+          </div>
 
-        <div>
-          <label>Required Skills *</label>
-          <select
-            multiple
-            value={formData.requiredSkills}
-            onChange={handleMultiSelectChange}
-          >
-            {skillsOptions.map((skill) => (
-              <option key={skill} value={skill}>
-                {skill}
-              </option>
-            ))}
-          </select>
-          {errors.requiredSkills && <p>{errors.requiredSkills}</p>}
-        </div>
+          <div>
+            <label>Required Skills *</label>
+            <select
+              multiple
+              value={formData.requiredSkills}
+              onChange={handleMultiSelectChange}
+            >
+              {skillsOptions.map((skill) => (
+                <option key={skill} value={skill}>
+                  {skill}
+                </option>
+              ))}
+            </select>
+            {errors.requiredSkills && <p>{errors.requiredSkills}</p>}
+          </div>
 
-        <div>
-          <label>Urgency *</label>
-          <select
-            name="urgency"
-            value={formData.urgency}
-            onChange={handleChange}
-          >
-            <option value="">-- Select Urgency --</option>
-            {urgencyOptions.map((urgency) => (
-              <option key={urgency} value={urgency}>
-                {urgency}
-              </option>
-            ))}
-          </select>
-          {errors.urgency && <p>{errors.urgency}</p>}
-        </div>
+          <div>
+            <label>Urgency *</label>
+            <select
+              name="urgency"
+              value={formData.urgency}
+              onChange={handleChange}
+            >
+              <option value="">-- Select Urgency --</option>
+              {urgencyOptions.map((urgency) => (
+                <option key={urgency} value={urgency}>
+                  {urgency}
+                </option>
+              ))}
+            </select>
+            {errors.urgency && <p>{errors.urgency}</p>}
+          </div>
 
-        <div>
-          <label>Event Date *</label>
-          <input
-            type="date"
-            name="eventDate"
-            value={formData.eventDate}
-            onChange={handleChange}
-          />
-          {errors.eventDate && <p>{errors.eventDate}</p>}
-        </div>
+          <div>
+            <label>Event Date *</label>
+            <input
+              type="date"
+              name="eventDate"
+              min={todayDate}
+              value={formData.eventDate}
+              onChange={handleChange}
+            />
+            {errors.eventDate && <p>{errors.eventDate}</p>}
+          </div>
 
-        <button type="submit">
-          Create Event
-        </button>
-      </form>
+          <button type="submit">
+            Create Event
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
