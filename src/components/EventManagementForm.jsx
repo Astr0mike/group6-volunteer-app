@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import '../css/EventManagementForm.css'
 
-export default function EventManagementForm() {
+function EventManagementForm() {
   const [formData, setFormData] = useState({
     eventName: "",
     eventDescription: "",
@@ -57,51 +57,47 @@ export default function EventManagementForm() {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow rounded">
-      <h2 className="text-2xl font-bold mb-4">Event Management Form</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div>
+      <h2>Event Management Form</h2>
+      <form onSubmit={handleSubmit}>
         <div>
-          <label className="block font-medium">Event Name *</label>
+          <label>Event Name *</label>
           <input
             type="text"
             name="eventName"
             maxLength="100"
             value={formData.eventName}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
           />
-          {errors.eventName && <p className="text-red-500 text-sm">{errors.eventName}</p>}
+          {errors.eventName && <p>{errors.eventName}</p>}
         </div>
 
         <div>
-          <label className="block font-medium">Event Description *</label>
+          <label>Event Description *</label>
           <textarea
             name="eventDescription"
             value={formData.eventDescription}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
           ></textarea>
-          {errors.eventDescription && <p className="text-red-500 text-sm">{errors.eventDescription}</p>}
+          {errors.eventDescription && <p>{errors.eventDescription}</p>}
         </div>
 
         <div>
-          <label className="block font-medium">Location *</label>
+          <label>Location *</label>
           <textarea
             name="location"
             value={formData.location}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
           ></textarea>
-          {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
+          {errors.location && <p>{errors.location}</p>}
         </div>
 
         <div>
-          <label className="block font-medium">Required Skills *</label>
+          <label>Required Skills *</label>
           <select
             multiple
             value={formData.requiredSkills}
             onChange={handleMultiSelectChange}
-            className="w-full border p-2 rounded h-32"
           >
             {skillsOptions.map((skill) => (
               <option key={skill} value={skill}>
@@ -109,16 +105,15 @@ export default function EventManagementForm() {
               </option>
             ))}
           </select>
-          {errors.requiredSkills && <p className="text-red-500 text-sm">{errors.requiredSkills}</p>}
+          {errors.requiredSkills && <p>{errors.requiredSkills}</p>}
         </div>
 
         <div>
-          <label className="block font-medium">Urgency *</label>
+          <label>Urgency *</label>
           <select
             name="urgency"
             value={formData.urgency}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
           >
             <option value="">-- Select Urgency --</option>
             {urgencyOptions.map((urgency) => (
@@ -127,25 +122,21 @@ export default function EventManagementForm() {
               </option>
             ))}
           </select>
-          {errors.urgency && <p className="text-red-500 text-sm">{errors.urgency}</p>}
+          {errors.urgency && <p>{errors.urgency}</p>}
         </div>
 
         <div>
-          <label className="block font-medium">Event Date *</label>
+          <label>Event Date *</label>
           <input
             type="date"
             name="eventDate"
             value={formData.eventDate}
             onChange={handleChange}
-            className="w-full border p-2 rounded"
           />
-          {errors.eventDate && <p className="text-red-500 text-sm">{errors.eventDate}</p>}
+          {errors.eventDate && <p>{errors.eventDate}</p>}
         </div>
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
+        <button type="submit">
           Create Event
         </button>
       </form>
@@ -154,4 +145,3 @@ export default function EventManagementForm() {
 }
 
 export default EventManagementForm;
-
