@@ -1,0 +1,53 @@
+.notifications {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: left;
+    font-family: "PT Sans Narrow", sans-serif;
+}
+
+.notifications h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-left: 10px;
+    border-left: black solid 5px;
+}
+
+.new-message {
+    font-size: 18px;
+    color: grey;
+    margin-bottom: 10px;
+}
+
+.no-new {
+    font-style: italic;
+    color: red;
+}
+
+.opened-messages h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.opened-messages ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.opened-messages li {
+    padding: 12px 0;
+    border-bottom: 1px solid #ccc;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.opened-messages li:last-child {
+    border-bottom: none;
+}
