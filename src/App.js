@@ -14,6 +14,7 @@ function App() {
             <nav>
                 <Link to="/register">Register</Link>
                 <Link to="/login">Login</Link>
+                <Link to="/create-event">Create Event</Link>
             </nav>
 
             <Routes>
@@ -21,6 +22,7 @@ function App() {
               <Route path="/volunteer-history" element={<VolunteerHistory />} />
               <Route path="/volunteer-matching" element={<VolunteerMatching />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/create-event" element={<EventManagementForm />} />
             </Routes>
         </div>
       </Router>
