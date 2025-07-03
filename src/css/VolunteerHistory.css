@@ -1,11 +1,53 @@
 .volunteer-history {
-    padding: 10px;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    font-family: "PT Sans Narrow", sans-serif;
+    text-align: left;
 }
 
 .volunteer-history h1 {
-    text-align: left;
-    margin-bottom: 0;
-    margin-left: auto;
+    text-align: center;
+    margin-bottom: 25px;
+    border-left: black solid 5px;
+    padding-left: 10px;
+}
+
+.volunteer-info p {
+    font-size: 18px;
+    margin: 8px 0;
+}
+
+.status {
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.status.active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status.inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.work-history h2 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.history-entry {
+    border-bottom: 1px solid #ccc;
+    padding: 12px 0;
+}
+
+.history-entry:last-child {
+    border-bottom: none;
 }
