@@ -1,4 +1,3 @@
-// src/components/Register.js
 import React from 'react';
 import '../css/Register.css';
 
@@ -15,7 +14,7 @@ const Register = () => {
                             placeholder="Enter your email"
                         />
                     </div>
-                    
+
                     <div className="input-group">
                         <label>Password:</label>
                         <input
@@ -23,7 +22,7 @@ const Register = () => {
                             placeholder="Enter your password"
                         />
                     </div>
-                    
+
                     <button type="submit">Register</button>
                 </form>
                 <div className="auth-links">
@@ -36,4 +35,3 @@ const Register = () => {
 };
 
 export default Register;
-

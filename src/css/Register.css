@@ -5,26 +5,26 @@
     min-height: 100vh;
 }
 
-register-form{
+.register-form {
     width: 300px;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
 }
 
-.input-group{
-    display:flex;
+.input-group {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 15px;
-    width:100%;
+    width: 100%;
 }
 
 .register-form label {
-    margin-bottom:5px;
+    margin-bottom: 5px;
 }
 
-.register-form input{
+.register-form input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -39,23 +39,20 @@ register-form{
     border: none;
     border-radius: 5px;
     margin-top: 10px;
-
 }
 
-.error-message{
+.error-message {
     color: red;
-    margin-top: 10ptx;
+    margin-top: 10px;
 }
 
 .auth-links {
     margin-top: 20px;
     display: flex;
     justify-content: space-around;
-
 }
 
-.author-links a{
+.auth-links a {
     color: #000;
     text-decoration: none;
-
 }
