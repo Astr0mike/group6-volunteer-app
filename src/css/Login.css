@@ -1,0 +1,50 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    /* Remove align-items: center and replace with padding-top */
+    padding-top: 50px; /* Adjust this value to move the box higher */
+    min-height: 100vh;
+}
+
+.login-form {
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center; /* Centers the h2 and button */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligns labels and inputs to the left */
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.login-form label {
+    margin-bottom: 5px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+
