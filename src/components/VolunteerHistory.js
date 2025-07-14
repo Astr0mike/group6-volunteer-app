@@ -1,25 +1,17 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../css/VolunteerHistory.css'
 
 const VolunteerHistory = () => {
-    const volunteer = {
-        name: "Jane Doe",
-        status: "Active",
-        history: [
-            {
-                organization: "Red Cross",
-                role: "Disaster Relief",
-                date: "2021-01-01",
-                hours: 4,
-            },
-            {
-                organization: "Houston Animal Shelter",
-                role: "Animal Care",
-                date: "2021-01-01",
-                hours: 3,
-            },
-        ],
-    };
+    const [volunteer, setVolunteer] = useState(null);
+
+    useEffect(() => {
+        fetch('http://localhost:3001/api/volunteer-history')
+        .then((res) => res.json())
+        .then((data) => setVolunteer(data))
+        .catch((err) => console.error('Error fetching data:', err));
+        }, []);
+
+    if (!volunteer) return <div>Loading...</div>;
 
     return ( // HTML for webpage
         <div className="volunteer-history">

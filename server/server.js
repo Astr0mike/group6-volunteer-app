@@ -1,16 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-
-const formRoutes = require('./routes/formRoutes');
+const volunteerRoutes = require('./routes/volunteerHistoryRoutes');
 
 const app = express();
-const PORT = 5000;
+const PORT = 3001;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-app.use('/api/form', formRoutes);
+app.use('/api/volunteer-history', volunteerRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
