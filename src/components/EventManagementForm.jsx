@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import "../css/EventManagementForm.css";
 function EventManagementForm() {
