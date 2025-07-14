@@ -26,8 +26,7 @@ const Register = () => {
                     <button type="submit">Register</button>
                 </form>
                 <div className="auth-links">
-                    <a href="/login">Login</a>
-                    <a href="/create-event">Create Event</a>
+                    <p>Have an account? <a href="/login">Login</a></p>
                 </div>
             </div>
         </div>
