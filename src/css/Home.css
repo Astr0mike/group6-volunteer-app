@@ -1,6 +1,6 @@
 .home {
     margin: 0 auto;
-    background-image: url('/public/IMG_0295.jpeg');
+    background-image: url('/public/homeBackground.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -10,6 +10,8 @@
 }
 
 .home-container {
+    max-width: 500px;
+    margin: 120px 75px 100px 75px;
     background-color: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -20,17 +22,22 @@
 
 .home h1 {
     text-align: left;
-    margin-left: auto;
     padding-left: 10px;
     font-family: sans-serif;
     border-left: 5px solid #000;
+    max-width: 100px;
 }
 
 .about-us {
     text-align: left;
     padding: 10px;
     font-family: sans-serif;
-    background-color: rgba(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 8px;
-    width: 300px;
+    width: auto;
+}
+
+.about-text {
+    padding: 10px;
+    font-family: sans-serif;
 }

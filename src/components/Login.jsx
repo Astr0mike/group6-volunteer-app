@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css/Login.css';
 
-const Login = () => {
+const Login = ({onLogin}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (email === 'user@example.com' && password === 'password') {
-            console.log("Login successful!");
+        if (email === 'volunteer@example.com' && password === 'password') {
+            onLogin('volunteer'); // Notify App component
+            navigate('/profile'); // Redirect to profile page
+        } else if (email === 'admin@example.com' && password === 'adminpass') {
+            onLogin('admin');
+            navigate('/create-event');
         } else {
             setError("Invalid credentials, please try again.");
         }
