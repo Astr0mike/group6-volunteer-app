@@ -90,6 +90,7 @@ const UserProfile = () => {
       }, []); */
 
   const [formData, setFormData] = useState({
+    username: '',
     fullName: '',
     address1: '',
     address2: '',
@@ -120,24 +121,43 @@ const UserProfile = () => {
     setFormData((prev) => ({ ...prev, skills: selectedSkills }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (
-        !formData.fullName ||
-        !formData.address1 ||
-        !formData.city ||
-        !formData.state ||
-        formData.zip.length < 5 ||
-        formData.skills.length === 0 ||
-        formData.availability.length === 0
-      ) {
-        alert('Please fill out all required fields correctly.');
-        return;
-      }
-      console.log('Submitted data:', formData);
-            setSubmitted(true);
-        };
+  if (
+    !formData.username ||
+    !formData.fullName ||
+    !formData.address1 ||
+    !formData.city ||
+    !formData.state ||
+    formData.zip.length < 5 ||
+    formData.skills.length === 0 ||
+    formData.availability.length === 0
+  ) {
+    alert('Please fill out all required fields correctly.');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:3001/api/user-profiles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      alert('Error: ' + error.error);
+      return;
+    }
+
+    setSubmitted(true);
+  } catch (error) {
+    alert('Submission failed, please try again later.');
+    console.error(error);
+  }
+};
+
 
   return (
     <div className="form-container">
@@ -146,6 +166,16 @@ const UserProfile = () => {
         <p className="success">Profile submitted successfully!</p>
       ) : (
         <form onSubmit={handleSubmit}>
+
+           <label>Username*</label>
+          <input
+            name="username"
+            value={formData.username}
+            maxLength={30}
+            onChange={handleChange}
+            required
+          />
+          
           <label>Full Name*</label>
           <input
             name="fullName"
