@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const volunteerRoutes = require('./routes/volunteerHistoryRoutes');
 const userProfileRoutes = require('./routes/userProfileRoutes');
+const events = require('./routes/events');
 const app = express();
 const PORT = 3001;
 
@@ -10,6 +11,7 @@ app.use(express.json());
 
 app.use('/api/volunteer-history', volunteerRoutes);
 app.use('/api/user-profiles', userProfileRoutes);
+app.use('/api/events', eventRoutes);
 
 
 app.listen(PORT, () => {
