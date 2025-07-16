@@ -80,15 +80,29 @@ function EventManagementForm() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const validationErrors = validate();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:3001/api/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setErrors(data.errors || {});
     } else {
-      setErrors({});
-      console.log("Form submitted:", formData);
-      alert("Event Created Successfully!");
+      alert(data.message || "Event Created Successfully!");
       setFormData({
         eventName: "",
         eventDescription: "",
@@ -99,7 +113,12 @@ function EventManagementForm() {
       });
       setSkillsDropdownOpen(false);
     }
-  };
+  } catch (error) {
+    console.error("Error submitting event:", error);
+    alert("An error occurred while creating the event. Please try again.");
+  }
+};
+
 
   return (
     <div className="form-container">
