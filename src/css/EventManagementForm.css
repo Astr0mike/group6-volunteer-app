@@ -1,4 +1,4 @@
-.volunteer-matching {
+.event-management {
     max-width: 1100px;
     margin: 40px auto;
     padding: 30px;
@@ -11,7 +11,7 @@
     font-family: "PT Sans Narrow", sans-serif;
 }
 
-.volunteer-matching h1 {
+.event-management h1 {
     text-align: center;
     margin-bottom: 25px;
     border-left: 5px solid #28a745;
@@ -34,8 +34,8 @@
     justify-content: left;
 }
 
-.volunteer-list,
-.opportunity-list {
+.event-staff-list,
+.event-opportunity-list {
     flex: 1;
     background: #fff8f0;
     padding: 20px;
@@ -44,13 +44,13 @@
     box-shadow: 0 0 5px rgba(0,0,0,0.05);
 }
 
-.volunteer-list ul {
+.event-staff-list ul {
     list-style: none;
     padding-left: 0;
     margin: 0;
 }
 
-.volunteer-list li {
+.event-staff-list li {
     display: block;
     margin-bottom: 10px;
     padding: 8px 12px;
@@ -60,13 +60,13 @@
     font-size: 14px;
 }
 
-.volunteer-list label span {
+.event-staff-list label span {
     align-items: center;
     gap: 8px;
 }
 
-.volunteer-list h3,
-.opportunity-list h3 {
+.event-staff-list h3,
+.event-opportunity-list h3 {
     margin-top: 0;
     border-bottom: 2px solid #f6993f;
     padding-bottom: 5px;
@@ -115,3 +115,4 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+
