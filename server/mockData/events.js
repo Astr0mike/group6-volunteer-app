@@ -13,7 +13,8 @@ module.exports = [
         location: "Austin, TX",
         type: "Education",
         urgency: "Medium",
-        distance: 10
+        distance: 10,
+        skillRequired: ["Teaching"]
     },
     {
         id: 3,
