@@ -1,11 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../css/VolunteerMatching.css'
+import axios from 'axios';
 
-// placeholder data, for now
-const mockVolunteers = [
-    { id: 1, name: 'Jane Doe', skill: 'First Aid', distance: 10 },
-    { id: 2, name: 'John Smith', skill: 'Teaching', distance: 5 },
-];
+
 
 const VolunteerMatching = () => {
     // function that sets the initial state of the filters to blank
@@ -14,7 +11,34 @@ const VolunteerMatching = () => {
         distance: '',
         type: '',
     });
+    const [volunteers, setVolunteers] = useState([]);
+    const [events, setEvents] = useState([]);
     const [selectedVolunteers, setSelectedVolunteers] = useState([]);
+
+    useEffect(() => {
+        const fetchMatches = async () => {
+            try {
+                const res = await axios.get('http://localhost:3001/api/volunteer-matching/match', {
+                    params: filters,
+                });
+                console.log(res.data);
+                setVolunteers(res.data.volunteers);
+                setEvents(res.data.events);
+            } catch (err) {
+                console.error('Error fetching matches:', err);
+            }
+        };
+
+        fetchMatches();
+    }, [filters]);
+
+    // function to handle changing the filters
+    const handleChange = (e) => {
+        setFilters({
+            ...filters,
+            [e.target.name]: e.target.value,
+        });
+    };
 
     // function to handle checkboxes
     const handleCheckboxChange = (id) => {
@@ -27,18 +51,10 @@ const VolunteerMatching = () => {
 
     // Alerts admin that they have notified selected volunteer(s)
     const handleNotify = () => {
-        const names = mockVolunteers
+        const names = volunteers
             .filter((volunteer) => selectedVolunteers.includes(volunteer.id))
             .map((volunteer) => volunteer.name);
         alert(`You have been notified of ${names.join(', ')}`);
-    };
-
-    // function to handle changing the filters
-    const handleChange = (e) => {
-        setFilters({
-            ...filters,
-            [e.target.name]: e.target.value,
-        });
     };
 
     return (
@@ -69,17 +85,18 @@ const VolunteerMatching = () => {
                 <div className="volunteer-list">
                     <h3>Potential Volunteers</h3>
                     <ul>
-                        {/* to be replaced with data from a database */ mockVolunteers.map((volunteer) => (
-                            <il key={volunteer.id}>
+                        {volunteers.length === 0 && <li>No volunteers found.</li>}
+                        {/* to be replaced with data from a database */ volunteers.map((volunteer) => (
+                            <li key={volunteer.id}>
                                 <label>
                                     <input
                                         type="checkbox"
                                         checked={selectedVolunteers.includes(volunteer.id)}
                                         onChange={() => handleCheckboxChange(volunteer.id)}
                                     />
-                                    {` ${volunteer.name} - ${volunteer.skill}, ${volunteer.distance} mi`}
+                                    <span>{` ${volunteer.name} - ${volunteer.skills}, ${volunteer.distance} mi`}</span>
                                 </label>
-                            </il>
+                            </li>
                             ))}
                     </ul>
                 </div>
@@ -88,8 +105,13 @@ const VolunteerMatching = () => {
                     <h3>Matching Opportunities</h3>
                     {/* to be replaced with data from a database */}
                     <ul>
-                        <li>Local Shelter — Needs First Aid</li>
-                        <li>Community Center — Needs Teaching</li>
+                        {events.length === 0 && <li>No opportunities found.</li>}
+                        {events.map((event) => (
+                            <li key={event.id}>
+                                {`Event ID ${event.id}: ${event.name} - ${event.location}, ${event.type}, 
+                                ${event.urgency}, ${event.distance} mi`}
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>
