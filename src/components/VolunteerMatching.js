@@ -3,7 +3,6 @@ import '../css/VolunteerMatching.css'
 import axios from 'axios';
 
 
-
 const VolunteerMatching = () => {
     // function that sets the initial state of the filters to blank
     const [filters, setFilters] = useState({
@@ -50,11 +49,17 @@ const VolunteerMatching = () => {
     };
 
     // Alerts admin that they have notified selected volunteer(s)
-    const handleNotify = () => {
-        const names = volunteers
-            .filter((volunteer) => selectedVolunteers.includes(volunteer.id))
-            .map((volunteer) => volunteer.name);
-        alert(`You have been notified of ${names.join(', ')}`);
+    const handleNotify = async () => {
+        try {
+            const res = await axios.post('http://localhost:3001/api/volunteer-matching/notify', {
+                volunteerIds: selectedVolunteers
+            });
+            const names = res.data.notified.map(n => n.volunteer);
+            alert(`You have notified ${names.join(', ')}`);
+        } catch (err) {
+            console.error('Error notifying volunteers:', err);
+            alert('An error occurred while notifying the volunteers. Please try again.');
+        }
     };
 
     return (

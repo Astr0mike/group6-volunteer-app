@@ -1,24 +1,27 @@
 const volunteers = require('../mockData/volunteers');
+const events = require('../mockData/events');
 
 const notifyVolunteers = (res, req) => {
-    const { volunteerId, event } = req.body;
+    const { volunteerIds } = req.body;
 
-    if (!volunteerId || !Array.isArray(volunteerId)) {
+    if (!Array.isArray(volunteerIds)) {
         return res.status(400).json({ error: 'Volunteer IDs must be an array.' });
     }
 
     const notified = volunteerIds.map(id => {
         const volunteer = volunteers.find(v => v.id === id);
-        if (volunteer) {
-            console.log(`Sending notification to ${volunteer.name} about ${event.name}`);
-            return {
-                id: volunteer.id,
-                name: volunteer.name,
-                email: volunteer.email,
-                message: `You have a new notification from ${event.name} at ${event.location}.`
-            };
-        }
-        return null;
+        if (!volunteer) return null;
+
+        const matchedEvents = events.filter(e =>
+            !e.skillRequired || e.skillRequired.some(req => volunteer.skills.includes(req))
+        );
+
+        console.log(`Notified ${ volunteer.name} about events: ${matchedEvents.map(e => e.eventName).join(', ')}`);
+
+        return {
+            volunteer: volunteer.name,
+            events: matchedEvents.map(e => e.eventName)
+        };
     }).filter(Boolean);
 
     res.status(200).json({ message: 'Notifications sent successfully!', notified });
