@@ -7,7 +7,6 @@ exports.validateEvent = (data) => {
     errors.eventName = 'Event Name cannot exceed 100 characters.';
   }
 
-  // Event Description
   if (!data.eventDescription || typeof data.eventDescription !== 'string' || data.eventDescription.trim() === '') {
     errors.eventDescription = 'Event Description is required.';
   } else if (data.eventDescription.length > 500) {
