@@ -5,6 +5,7 @@ const userProfileRoutes = require('./routes/userProfileRoutes');
 const eventRoutes = require('./routes/events');
 const matchRoutes = require('./routes/volunteerMatchingRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const db = require('./pool')
 
 const app = express();
 const PORT = 3001;
@@ -23,3 +24,14 @@ app.use('/api/notifications', notificationRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// checking for a proper database connection with the server back-end
+db.getConnection()
+.then(connection => {
+    console.log('MySQL connection established.');
+    connection.release();
+  })
+  .catch(err => {
+    console.error('Error connecting to the MySQL database:', err);
+  });
+
