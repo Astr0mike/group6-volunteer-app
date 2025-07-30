@@ -112,14 +112,6 @@ const UserProfile = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSkillChange = (e) => {
-    const { options } = e.target;
-    const selectedSkills = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) selectedSkills.push(options[i].value);
-    }
-    setFormData((prev) => ({ ...prev, skills: selectedSkills }));
-  };
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -136,14 +128,25 @@ const UserProfile = () => {
   ) {
     alert('Please fill out all required fields correctly.');
     return;
+
   }
 
+  const payload = {
+    ...formData,
+    availability: formData.availability.map(d => d.format("YYYY-MM-DD"))
+  };
+
   try {
-    const response = await fetch('http://localhost:3001/api/user-profiles', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    });
+    const response = await fetch('/api/user-profiles', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    ...formData,
+    // convert Date objects to ISO YYYY-MM-DD strings:
+    availability: formData.availability.map(d => d.format("YYYY-MM-DD"))
+  }),
+});
+
 
     if (!response.ok) {
       const error = await response.json();
