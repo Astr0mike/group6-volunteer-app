@@ -17,12 +17,12 @@
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 CREATE TABLE EventDetails (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  eventName VARCHAR(100) NOT NULL,
-  eventDescription TEXT NOT NULL,
-  location TEXT NOT NULL,
-  requiredSkills TEXT NOT NULL,
-  urgency ENUM('Low', 'Medium', 'High', 'Critical') NOT NULL,
-  eventDate DATE NOT NULL
+  eventName VARCHAR(100),
+  eventDescription TEXT,
+  location TEXT,
+  requiredSkills TEXT,
+  urgency ENUM('Low', 'Medium', 'High', 'Critical'),
+  eventDate DATE
 );
 
 CREATE TABLE `UserProfile` (
