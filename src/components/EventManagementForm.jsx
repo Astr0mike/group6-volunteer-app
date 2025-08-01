@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "../css/EventManagementForm.css";
+import React, { useState, useEffect } from "react";
+
 function EventManagementForm() {
   const [formData, setFormData] = useState({
     eventName: "",
@@ -12,6 +12,7 @@ function EventManagementForm() {
 
   const [errors, setErrors] = useState({});
   const [skillsDropdownOpen, setSkillsDropdownOpen] = useState(false);
+  const [events, setEvents] = useState([]);
 
   const skillsOptions = [
     "Leadership",
@@ -24,6 +25,17 @@ function EventManagementForm() {
   ];
   const urgencyOptions = ["Low", "Medium", "High", "Critical"];
   const todayDate = new Date().toISOString().split("T")[0];
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = () => {
+    fetch("http://localhost:3001/api/events")
+      .then((res) => res.json())
+      .then((data) => setEvents(data))
+      .catch((err) => console.error("Failed to load events:", err));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -81,178 +93,196 @@ function EventManagementForm() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  const validationErrors = validate();
-  if (Object.keys(validationErrors).length > 0) {
-    setErrors(validationErrors);
-    return;
-  }
-
-  try {
-    const response = await fetch('http://localhost:3001/api/events', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      setErrors(data.errors || {});
-    } else {
-      alert(data.message || "Event Created Successfully!");
-      setFormData({
-        eventName: "",
-        eventDescription: "",
-        location: "",
-        requiredSkills: [],
-        urgency: "",
-        eventDate: "",
-      });
-      setSkillsDropdownOpen(false);
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
     }
-  } catch (error) {
-    console.error("Error submitting event:", error);
-    alert("An error occurred while creating the event. Please try again.");
-  }
-};
 
+    try {
+      const response = await fetch("http://localhost:3001/api/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors(data.errors || {});
+      } else {
+        alert(data.message || "Event Created Successfully!");
+        setFormData({
+          eventName: "",
+          eventDescription: "",
+          location: "",
+          requiredSkills: [],
+          urgency: "",
+          eventDate: "",
+        });
+        setSkillsDropdownOpen(false);
+        fetchEvents();
+      }
+    } catch (error) {
+      console.error("Error submitting event:", error);
+      alert("An error occurred while creating the event. Please try again.");
+    }
+  };
 
   return (
-    <div className="form-container">
-      <div className="form-card">
-        <h2 className="form-title">Event Management Form</h2>
+    <div>
+      <h2>Event Management Form</h2>
 
-        <form onSubmit={handleSubmit}>
-          {/* Event Name */}
-          <div className="form-group">
-            <label htmlFor="eventName" className="form-label">
-              Event Name <span className="required-star">*</span>
-            </label>
-            <input
-              type="text"
-              id="eventName"
-              name="eventName"
-              maxLength="100"
-              value={formData.eventName}
-              onChange={handleChange}
-              className="form-input"
-            />
-            {errors.eventName && <p className="error-message">{errors.eventName}</p>}
-          </div>
+      <form onSubmit={handleSubmit}>
+        {/* Event Name */}
+        <div>
+          <label htmlFor="eventName">
+            Event Name <span>*</span>
+          </label>
+          <input
+            type="text"
+            id="eventName"
+            name="eventName"
+            maxLength="100"
+            value={formData.eventName}
+            onChange={handleChange}
+          />
+          {errors.eventName && <p>{errors.eventName}</p>}
+        </div>
 
-          {/* Event Description */}
-          <div className="form-group">
-            <label htmlFor="eventDescription" className="form-label">
-              Event Description <span className="required-star">*</span>
-            </label>
-            <textarea
-              id="eventDescription"
-              name="eventDescription"
-              value={formData.eventDescription}
-              onChange={handleChange}
-              rows="4"
-              className="form-textarea"
-            ></textarea>
-            {errors.eventDescription && <p className="error-message">{errors.eventDescription}</p>}
-          </div>
+        {/* Event Description */}
+        <div>
+          <label htmlFor="eventDescription">
+            Event Description <span>*</span>
+          </label>
+          <textarea
+            id="eventDescription"
+            name="eventDescription"
+            value={formData.eventDescription}
+            onChange={handleChange}
+            rows="4"
+          ></textarea>
+          {errors.eventDescription && <p>{errors.eventDescription}</p>}
+        </div>
 
-          {/* Location */}
-          <div className="form-group">
-            <label htmlFor="location" className="form-label">
-              Location <span className="required-star">*</span>
-            </label>
-            <textarea
-              id="location"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              rows="2"
-              className="form-textarea"
-            ></textarea>
-            {errors.location && <p className="error-message">{errors.location}</p>}
-          </div>
+        {/* Location */}
+        <div>
+          <label htmlFor="location">
+            Location <span>*</span>
+          </label>
+          <textarea
+            id="location"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            rows="2"
+          ></textarea>
+          {errors.location && <p>{errors.location}</p>}
+        </div>
 
-          {/* Required Skills */}
-          <div className="form-group skills-dropdown-container">
-            <label className="form-label">
-              Required Skills <span className="required-star">*</span> (Select all that apply)
-            </label>
-            <button
-              type="button"
-              onClick={toggleDropdown}
-              className="skills-dropdown-button"
-            >
-              {formData.requiredSkills.length > 0
-                ? `Selected: ${formData.requiredSkills.join(", ")}`
-                : "Select Skills"}
-              <span className="dropdown-arrow">{skillsDropdownOpen ? "▲" : "▼"}</span>
-            </button>
-            {skillsDropdownOpen && (
-              <div className="skills-dropdown-list">
-                {skillsOptions.map((skill) => (
-                  <label key={skill} className="skills-checkbox-label">
-                    <input
-                      type="checkbox"
-                      value={skill}
-                      checked={formData.requiredSkills.includes(skill)}
-                      onChange={handleCheckboxChange}
-                    />
-                    {skill}
-                  </label>
-                ))}
-              </div>
-            )}
-            {errors.requiredSkills && <p className="error-message">{errors.requiredSkills}</p>}
-          </div>
-
-          {/* Urgency */}
-          <div className="form-group">
-            <label htmlFor="urgency" className="form-label">
-              Urgency <span className="required-star">*</span>
-            </label>
-            <select
-              id="urgency"
-              name="urgency"
-              value={formData.urgency}
-              onChange={handleChange}
-              className="form-select"
-            >
-              <option value="">-- Select Urgency --</option>
-              {urgencyOptions.map((urgency) => (
-                <option key={urgency} value={urgency}>
-                  {urgency}
-                </option>
-              ))}
-            </select>
-            {errors.urgency && <p className="error-message">{errors.urgency}</p>}
-          </div>
-
-          {/* Event Date */}
-          <div className="form-group">
-            <label htmlFor="eventDate" className="form-label">
-              Event Date <span className="required-star">*</span>
-            </label>
-            <input
-              type="date"
-              id="eventDate"
-              name="eventDate"
-              min={todayDate}
-              value={formData.eventDate}
-              onChange={handleChange}
-              className="form-input"
-            />
-            {errors.eventDate && <p className="error-message">{errors.eventDate}</p>}
-          </div>
-
-          {/* Submit Button */}
-          <button type="submit" className="submit-button">
-            Create Event
+        {/* Required Skills */}
+        <div>
+          <label>
+            Required Skills <span>*</span> (Select all that apply)
+          </label>
+          <button type="button" onClick={toggleDropdown}>
+            {formData.requiredSkills.length > 0
+              ? `Selected: ${formData.requiredSkills.join(", ")}`
+              : "Select Skills"}
+            <span>{skillsDropdownOpen ? "▲" : "▼"}</span>
           </button>
-        </form>
-      </div>
+          {skillsDropdownOpen && (
+            <div>
+              {skillsOptions.map((skill) => (
+                <label key={skill}>
+                  <input
+                    type="checkbox"
+                    value={skill}
+                    checked={formData.requiredSkills.includes(skill)}
+                    onChange={handleCheckboxChange}
+                  />
+                  {skill}
+                </label>
+              ))}
+            </div>
+          )}
+          {errors.requiredSkills && <p>{errors.requiredSkills}</p>}
+        </div>
+
+        {/* Urgency */}
+        <div>
+          <label htmlFor="urgency">
+            Urgency <span>*</span>
+          </label>
+          <select
+            id="urgency"
+            name="urgency"
+            value={formData.urgency}
+            onChange={handleChange}
+          >
+            <option value="">-- Select Urgency --</option>
+            {urgencyOptions.map((urgency) => (
+              <option key={urgency} value={urgency}>
+                {urgency}
+              </option>
+            ))}
+          </select>
+          {errors.urgency && <p>{errors.urgency}</p>}
+        </div>
+
+        {/* Event Date */}
+        <div>
+          <label htmlFor="eventDate">
+            Event Date <span>*</span>
+          </label>
+          <input
+            type="date"
+            id="eventDate"
+            name="eventDate"
+            min={todayDate}
+            value={formData.eventDate}
+            onChange={handleChange}
+          />
+          {errors.eventDate && <p>{errors.eventDate}</p>}
+        </div>
+
+        {/* Submit Button */}
+        <button type="submit">Create Event</button>
+      </form>
+
+      <hr />
+      <h3>Submitted Events</h3>
+      {events.length === 0 ? (
+        <p>No events submitted yet.</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Event Name</th>
+              <th>Description</th>
+              <th>Location</th>
+              <th>Skills</th>
+              <th>Urgency</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {events.map((event) => (
+              <tr key={event.id}>
+                <td>{event.eventName}</td>
+                <td>{event.eventDescription}</td>
+                <td>{event.location}</td>
+                <td>{event.requiredSkills}</td>
+                <td>{event.urgency}</td>
+                <td>{new Date(event.eventDate).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
