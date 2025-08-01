@@ -52,20 +52,20 @@ function Navigation({isLoggedIn, role, onLogout}) {
 }
 
 function App() {
-        const [isLoggedIn, setIsLoggedIn] = useState(false);
-        const [role, setRole] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [role, setRole] = useState('');
 
-        const handleLogin = (userRole) => {
-            setIsLoggedIn(true);
-            setRole(userRole);
-        };
+    const handleLogin = (userRole) => {
+        setIsLoggedIn(true);
+        setRole(userRole);
+    };
 
-        const handleLogout = () => {
-            setIsLoggedIn(false);
-            setRole('');
-        };
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        setRole('');
+    };
 
-        return (
+    return (
         <Router>
             <div className="App">
                 <Navigation

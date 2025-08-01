@@ -1,7 +1,6 @@
 .login-container {
     display: flex;
     justify-content: center;
-    /* Remove align-items: center and replace with padding-top */
     padding-top: 50px; /* Adjust this value to move the box higher */
     min-height: 100vh;
 }

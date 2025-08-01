@@ -1,3 +1,4 @@
+// src/components/Register.js
 import React from 'react';
 import '../css/Register.css';
 
