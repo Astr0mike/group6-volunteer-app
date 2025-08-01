@@ -83,6 +83,7 @@ function App() {
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login onLogin={handleLogin}/>} />
+                
                 </Routes>
             </div>
         </Router>

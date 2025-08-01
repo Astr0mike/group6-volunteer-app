@@ -140,17 +140,13 @@ const UserProfile = () => {
     const response = await fetch('/api/user-profiles', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    ...formData,
-    // convert Date objects to ISO YYYY-MM-DD strings:
-    availability: formData.availability.map(d => d.format("YYYY-MM-DD"))
-  }),
+  body: JSON.stringify(payload),
 });
 
 
     if (!response.ok) {
       const error = await response.json();
-      alert('Error: ' + error.error);
+      alert('Error: ' + (error.error || JSON.stringify(error)));
       return;
     }
 
