@@ -1,11 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const volunteerRoutes = require('./routes/volunteerHistoryRoutes');
-const userProfileRoutes = require('./routes/userProfileRoutes');
-const eventRoutes = require('./routes/events');
-const matchRoutes = require('./routes/volunteerMatchingRoutes');
-const notificationRoutes = require('./routes/notificationRoutes');
-const db = require('./pool')
+const mongoose = require('mongoose');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = 3001;
@@ -13,25 +9,21 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-//Testing Comments to see if I can push
-
-app.use('/api/volunteer-history', volunteerRoutes);
-app.use('/api/user-profiles', userProfileRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/volunteer-matching', matchRoutes);
-app.use('/api/notifications', notificationRoutes);
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+mongoose.connect('mongodb://127.0.0.1:27017/volunteer_app', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('MongoDB connected');
+}).catch((err) => {
+  console.error('MongoDB connection error:', err);
 });
 
-// checking for a proper database connection with the server back-end
-db.getConnection()
-.then(connection => {
-    console.log('MySQL connection established.');
-    connection.release();
-  })
-  .catch(err => {
-    console.error('Error connecting to the MySQL database:', err);
-  });
+app.use('/api/auth', authRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
