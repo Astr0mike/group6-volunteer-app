@@ -131,10 +131,18 @@ const UserProfile = () => {
 
   }
 
-  const payload = {
-    ...formData,
-    availability: formData.availability.map(d => d.format("YYYY-MM-DD"))
-  };
+ const normalizedAvailability = formData.availability.map(d => {
+  if (d && typeof d === 'object' && typeof d.format === 'function') {
+    return d.format("YYYY-MM-DD");
+  }
+  return String(d);
+});
+
+const payload = {
+  ...formData,
+  availability: normalizedAvailability
+};
+
 
   try {
     const response = await fetch('/api/user-profiles', {
