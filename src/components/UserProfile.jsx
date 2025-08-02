@@ -57,16 +57,29 @@ const UserProfile = () => {
     e.preventDefault();
 
     if (
-      !formData.username || !formData.fullName || !formData.address1 || !formData.city ||
-      !formData.state || formData.zip.length < 5 || formData.skills.length === 0 || formData.availability.length === 0
+      !formData.username ||
+      !formData.fullName ||
+      !formData.address1 ||
+      !formData.city ||
+      !formData.state ||
+      formData.zip.length < 5 ||
+      formData.skills.length === 0 ||
+      formData.availability.length === 0
     ) {
       alert('Please fill out all required fields correctly.');
       return;
     }
 
+    const normalizedAvailability = formData.availability.map(d => {
+      if (d && typeof d === 'object' && typeof d.format === 'function') {
+        return d.format("YYYY-MM-DD");
+      }
+      return String(d);
+    });
+
     const payload = {
       ...formData,
-      availability: formData.availability.map(d => d.format("YYYY-MM-DD"))
+      availability: normalizedAvailability
     };
 
     try {
@@ -175,3 +188,4 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
+
