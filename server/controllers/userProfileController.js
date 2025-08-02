@@ -3,11 +3,10 @@ const { validateUserProfile } = require('../validation/userProfileValidation');
 
 function safeParseJson(value) {
   if (value == null) return value;
-  if (typeof value === 'object') return value; // already parsed
+  if (typeof value === 'object') return value;
   try {
     return JSON.parse(value);
   } catch {
-    // fallback: comma-separated string => array
     return String(value)
       .split(',')
       .map(s => s.trim())
@@ -26,6 +25,7 @@ function normalizeArrayField(field) {
 // CREATE
 exports.createUserProfile = async (req, res) => {
   console.log('createUserProfile payload:', req.body);
+
   const { isValid, errors } = validateUserProfile(req.body);
   if (!isValid) return res.status(400).json({ errors });
 
@@ -139,6 +139,7 @@ exports.getAllUserProfiles = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
   const id = parseInt(req.params.id, 10);
   console.log('updateUserProfile payload:', req.body);
+
   const { isValid, errors } = validateUserProfile(req.body);
   if (!isValid) return res.status(400).json({ errors });
 

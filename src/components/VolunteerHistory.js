@@ -1,26 +1,26 @@
-import React, {useEffect, useState} from 'react';
-import '../css/VolunteerHistory.css'
+import React, { useEffect, useState } from 'react';
+import '../css/VolunteerHistory.css';
 
 const VolunteerHistory = () => {
     const [volunteers, setVolunteers] = useState([]);
 
     useEffect(() => {
         fetch('http://localhost:3001/api/volunteer-history')
-        .then((res) => res.json())
-        .then((data) => setVolunteers(data))
-        .catch((err) => console.error('Error fetching data:', err));
-        }, []);
+            .then((res) => res.json())
+            .then((data) => setVolunteers(data))
+            .catch((err) => console.error('Error fetching data:', err));
+    }, []);
 
     if (!volunteers.length) return <div>Loading...</div>;
 
-    return ( // HTML for webpage
+    return (
         <div className="volunteer-history">
             <h1>Volunteer History</h1>
             {volunteers.map((volunteer, idx) => (
                 <div key={idx} className="volunteer-info">
                     <h2>{volunteer.name}</h2>
                     <p>
-                        <strong>Status:</strong> {' '}
+                        <strong>Status:</strong>{' '}
                         <span className={`status ${volunteer.status.toLowerCase()}`}>
                             {volunteer.status}
                         </span>
