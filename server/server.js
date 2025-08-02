@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 
 const volunteerRoutes = require('./routes/volunteerHistoryRoutes');
@@ -17,10 +16,7 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection for Auth
-mongoose.connect('mongodb://127.0.0.1:27017/volunteer_app')
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+// (Removed MongoDB since we're using MySQL for all data now)
 
 // MySQL Connection check
 db.getConnection()

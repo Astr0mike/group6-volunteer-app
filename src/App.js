@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
-import {BrowserRouter as Router, Routes, Route, Link, useLocation} from 'react-router-dom';
+// src/App.js
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Notifications from "./components/Notifications";
 import VolunteerMatching from "./components/VolunteerMatching";
 import VolunteerHistory from './components/VolunteerHistory';
@@ -10,8 +11,9 @@ import Register from './components/Register';
 import Login from './components/Login';
 import './App.css';
 
-function Navigation({isLoggedIn, role, onLogout}) {
+function Navigation({ isLoggedIn, role, onLogout }) {
     const location = useLocation();
+
     if (!isLoggedIn && location.pathname === '/') {
         return (
             <nav>
@@ -33,29 +35,25 @@ function Navigation({isLoggedIn, role, onLogout}) {
             {role === 'admin' && (
                 <>
                     <Link to="/create-event">Create Event</Link>
-                    <Link to="/volunteer-matching">Volunteer matching</Link>
+                    <Link to="/volunteer-matching">Volunteer Matching</Link>
                     <Link to="/volunteer-history">Volunteer History</Link>
                 </>
             )}
             {(location.pathname === '/login' || location.pathname === '/register') && (
-                <>
-                    <Link to="/">Back</Link>
-                </>
+                <Link to="/">Back</Link>
             )}
             {(location.pathname !== '/login' && location.pathname !== '/register') && (
-                <>
-                    <Link to="/" onClick={onLogout}>Logout</Link>
-                </>
+                <Link to="/" onClick={onLogout}>Logout</Link>
             )}
         </nav>
-    )
+    );
 }
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState('');
 
-    const handleLogin = (userRole) => {
+    const handleLogin = (userRole = 'volunteer') => {
         setIsLoggedIn(true);
         setRole(userRole);
     };
@@ -63,6 +61,7 @@ function App() {
     const handleLogout = () => {
         setIsLoggedIn(false);
         setRole('');
+        localStorage.clear(); // also clear stored user data
     };
 
     return (
@@ -82,7 +81,7 @@ function App() {
                     <Route path="/create-event" element={<EventManagementForm />} />
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/login" element={<Login onLogin={handleLogin}/>} />
+                    <Route path="/login" element={<Login onLogin={handleLogin} />} />
                 </Routes>
             </div>
         </Router>
