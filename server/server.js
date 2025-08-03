@@ -6,7 +6,7 @@ const volunteerRoutes = require('./routes/volunteerHistoryRoutes');
 const userProfileRoutes = require('./routes/userProfileRoutes');
 const eventRoutes = require('./routes/events');
 const matchRoutes = require('./routes/volunteerMatchingRoutes');
-const notificationRoutes = require('./routes/notificationRoutes');
+// const notificationRoutes = require('./routes/notificationRoutes');
 const db = require('./pool');
 
 const app = express();
@@ -34,7 +34,7 @@ app.use('/api/volunteer-history', volunteerRoutes);
 app.use('/api/user-profiles', userProfileRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/volunteer-matching', matchRoutes);
-app.use('/api/notifications', notificationRoutes);
+// app.use('/api/notifications', notificationRoutes);
 
 // Root route
 app.get('/', (req, res) => {
