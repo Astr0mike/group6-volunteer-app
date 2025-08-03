@@ -1,7 +1,6 @@
 {
   "name": "cosc4353volunteer-app",
   "version": "0.1.0",
-  "proxy": "http://localhost:3001",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
