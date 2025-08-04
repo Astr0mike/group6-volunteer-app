@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 function EventManagementForm() {
   const [formData, setFormData] = useState({
@@ -31,7 +33,7 @@ function EventManagementForm() {
   }, []);
 
   const fetchEvents = () => {
-    fetch("http://localhost:3001/api/events")
+    fetch('http://localhost:3001/api/events')
       .then((res) => res.json())
       .then((data) => setEvents(data))
       .catch((err) => console.error("Failed to load events:", err));
@@ -101,7 +103,7 @@ function EventManagementForm() {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/api/events", {
+      const response = await fetch('http://localhost:3001/api/events', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,6 +132,58 @@ function EventManagementForm() {
       console.error("Error submitting event:", error);
       alert("An error occurred while creating the event. Please try again.");
     }
+  };
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Event Report", 14, 20);
+
+    const tableColumn = [
+      "Event Name",
+      "Description",
+      "Location",
+      "Skills",
+      "Urgency",
+      "Date",
+    ];
+    const tableRows = [];
+
+    events.forEach((event) => {
+      const eventData = [
+        event.eventName,
+        event.eventDescription,
+        event.location,
+        Array.isArray(event.requiredSkills)
+          ? event.requiredSkills.join(", ")
+          : event.requiredSkills,
+        event.urgency,
+        new Date(event.eventDate).toLocaleDateString(),
+      ];
+      tableRows.push(eventData);
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+      styles: {
+        fontSize: 10,
+        overflow: "linebreak",
+        cellPadding: 2,
+      },
+      columnStyles: {
+        0: { cellWidth: 30 },
+        1: { cellWidth: 45 },
+        2: { cellWidth: 30 },
+        3: { cellWidth: 35 },
+        4: { cellWidth: 20 },
+        5: { cellWidth: 25 },
+      },
+    });
+
+    doc.save("event_report.pdf");
   };
 
   return (
@@ -191,7 +245,7 @@ function EventManagementForm() {
           <button type="button" onClick={toggleDropdown}>
             {formData.requiredSkills.length > 0
               ? `Selected: ${formData.requiredSkills.join(", ")}`
-              : "Select Skills"}
+              : "Select Skills"}{" "}
             <span>{skillsDropdownOpen ? "▲" : "▼"}</span>
           </button>
           {skillsDropdownOpen && (
@@ -254,35 +308,50 @@ function EventManagementForm() {
       </form>
 
       <hr />
-      <h3>Submitted Events</h3>
-      {events.length === 0 ? (
-        <p>No events submitted yet.</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Event Name</th>
-              <th>Description</th>
-              <th>Location</th>
-              <th>Skills</th>
-              <th>Urgency</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {events.map((event) => (
-              <tr key={event.id}>
-                <td>{event.eventName}</td>
-                <td>{event.eventDescription}</td>
-                <td>{event.location}</td>
-                <td>{event.requiredSkills}</td>
-                <td>{event.urgency}</td>
-                <td>{new Date(event.eventDate).toLocaleDateString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+      {events.length > 0 && (
+        <button onClick={handleDownloadPDF}>Download Event Report (PDF)</button>
       )}
+
+      <div>
+        <h3>Submitted Events</h3>
+        {events.length === 0 ? (
+          <p>No events submitted yet.</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Event Name</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Skills</th>
+                <th>Urgency</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {events.map((event) => (
+                <tr key={event.id}>
+                  <td>{event.eventName}</td>
+                  <td>{event.eventDescription}</td>
+                  <td>{event.location}</td>
+                  <td>
+                    {Array.isArray(event.requiredSkills)
+                      ? event.requiredSkills.join(", ")
+                      : event.requiredSkills}
+                  </td>
+                  <td>{event.urgency}</td>
+                  <td>{new Date(event.eventDate).toLocaleDateString()}</td>
+                  <td>
+                    {/* Delete button removed */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }
