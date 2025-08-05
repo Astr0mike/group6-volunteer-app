@@ -81,7 +81,7 @@ function App() {
                     <Route path="/create-event" element={<EventManagementForm />} />
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/login" element={<Login onLogin={handleLogin} />} />
+                    <Route path="/login" element={<Login onLogin={handleLogin}/>} />
                 </Routes>
             </div>
         </Router>
