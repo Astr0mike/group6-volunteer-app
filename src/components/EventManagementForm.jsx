@@ -15,6 +15,7 @@ function EventManagementForm() {
   const [errors, setErrors] = useState({});
   const [skillsDropdownOpen, setSkillsDropdownOpen] = useState(false);
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const skillsOptions = [
     "Leadership",
@@ -186,6 +187,14 @@ function EventManagementForm() {
     doc.save("event_report.pdf");
   };
 
+  const handleViewDetails = (event) => {
+    setSelectedEvent(event);
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedEvent(null);
+  };
+
   return (
     <div>
       <h2>Event Management Form</h2>
@@ -204,7 +213,7 @@ function EventManagementForm() {
             value={formData.eventName}
             onChange={handleChange}
           />
-          {errors.eventName && <p>{errors.eventName}</p>}
+          {errors.eventName && <p style={{ color: "red" }}>{errors.eventName}</p>}
         </div>
 
         {/* Event Description */}
@@ -219,7 +228,7 @@ function EventManagementForm() {
             onChange={handleChange}
             rows="4"
           ></textarea>
-          {errors.eventDescription && <p>{errors.eventDescription}</p>}
+          {errors.eventDescription && <p style={{ color: "red" }}>{errors.eventDescription}</p>}
         </div>
 
         {/* Location */}
@@ -234,7 +243,7 @@ function EventManagementForm() {
             onChange={handleChange}
             rows="2"
           ></textarea>
-          {errors.location && <p>{errors.location}</p>}
+          {errors.location && <p style={{ color: "red" }}>{errors.location}</p>}
         </div>
 
         {/* Required Skills */}
@@ -251,7 +260,7 @@ function EventManagementForm() {
           {skillsDropdownOpen && (
             <div>
               {skillsOptions.map((skill) => (
-                <label key={skill}>
+                <label key={skill} style={{ display: "block" }}>
                   <input
                     type="checkbox"
                     value={skill}
@@ -263,7 +272,7 @@ function EventManagementForm() {
               ))}
             </div>
           )}
-          {errors.requiredSkills && <p>{errors.requiredSkills}</p>}
+          {errors.requiredSkills && <p style={{ color: "red" }}>{errors.requiredSkills}</p>}
         </div>
 
         {/* Urgency */}
@@ -284,7 +293,7 @@ function EventManagementForm() {
               </option>
             ))}
           </select>
-          {errors.urgency && <p>{errors.urgency}</p>}
+          {errors.urgency && <p style={{ color: "red" }}>{errors.urgency}</p>}
         </div>
 
         {/* Event Date */}
@@ -300,7 +309,7 @@ function EventManagementForm() {
             value={formData.eventDate}
             onChange={handleChange}
           />
-          {errors.eventDate && <p>{errors.eventDate}</p>}
+          {errors.eventDate && <p style={{ color: "red" }}>{errors.eventDate}</p>}
         </div>
 
         {/* Submit Button */}
@@ -318,7 +327,7 @@ function EventManagementForm() {
         {events.length === 0 ? (
           <p>No events submitted yet.</p>
         ) : (
-          <table>
+          <table border="1" cellPadding="5" style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
               <tr>
                 <th>Event Name</th>
@@ -344,7 +353,7 @@ function EventManagementForm() {
                   <td>{event.urgency}</td>
                   <td>{new Date(event.eventDate).toLocaleDateString()}</td>
                   <td>
-                    {/* Delete button removed */}
+                    <button onClick={() => handleViewDetails(event)}>View Details</button>
                   </td>
                 </tr>
               ))}
@@ -352,6 +361,44 @@ function EventManagementForm() {
           </table>
         )}
       </div>
+
+      {selectedEvent && (
+        <div
+          style={{
+            border: "1px solid #ccc",
+            padding: "15px",
+            marginTop: "20px",
+            backgroundColor: "#f9f9f9",
+          }}
+        >
+          <h3>Event Details</h3>
+          <p>
+            <strong>Name:</strong> {selectedEvent.eventName}
+          </p>
+          <p>
+            <strong>Description:</strong> {selectedEvent.eventDescription}
+          </p>
+          <p>
+            <strong>Location:</strong> {selectedEvent.location}
+          </p>
+          <p>
+            <strong>Required Skills:</strong>{" "}
+            {Array.isArray(selectedEvent.requiredSkills)
+              ? selectedEvent.requiredSkills.join(", ")
+              : selectedEvent.requiredSkills}
+          </p>
+          <p>
+            <strong>Urgency:</strong> {selectedEvent.urgency}
+          </p>
+          <p>
+            <strong>Date:</strong>{" "}
+            {Array.isArray(selectedEvent.eventDate)
+              ? selectedEvent.eventDate.join(", ")
+              : selectedEvent.eventDate}
+          </p>
+          <button onClick={handleCloseDetails}>Close Details</button>
+        </div>
+      )}
     </div>
   );
 }
