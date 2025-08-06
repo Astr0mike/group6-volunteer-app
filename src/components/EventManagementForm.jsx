@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import '../css/EventManagementForm.css';
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
