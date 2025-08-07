@@ -8,16 +8,32 @@ const Login = ({onLogin}) => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (email === 'volunteer@example.com' && password === 'password') {
-            onLogin('volunteer'); // Notify App component
-            navigate('/profile'); // Redirect to profile page
-        } else if (email === 'admin@example.com' && password === 'adminpass') {
+        setError('');
+        if (email === 'admin@example.com' && password === 'adminpass') {
             onLogin('admin');
             navigate('/create-event');
         } else {
-            setError("Invalid credentials, please try again.");
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username: email, password})
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    onLogin('volunteer');
+                    navigate('/profile');
+                } else {
+                    setError(data.error || 'Login failed');
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                setError('Server error. Please try again later.');
+            }
         }
     };
 
