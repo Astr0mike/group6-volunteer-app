@@ -11,8 +11,6 @@ const Login = ({onLogin}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        
-        // This used to be hardcoded admin login — replaced with real backend call for better security & scalability
         if (email === 'admin@example.com' && password === 'adminpass') {
             onLogin('admin');
             navigate('/create-event');
