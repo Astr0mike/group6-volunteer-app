@@ -7,8 +7,8 @@ const VolunteerMatching = () => {
     // function that sets the initial state of the filters to blank
     const [filters, setFilters] = useState({
         skill: '',
-        distance: '',
-        type: '',
+        name: '',
+        urgency: '',
     });
     const [volunteers, setVolunteers] = useState([]);
     const [events, setEvents] = useState([]);
@@ -72,16 +72,17 @@ const VolunteerMatching = () => {
                     <input type="text" name="skill" value={filters.skill} onChange={handleChange} />
                 </label>
                 <label className="filter">
-                    Distance (mi):
-                    <input type="number" name="distance" value={filters.distance} onChange={handleChange} />
+                    Name:
+                    <input type="text" name="name" value={filters.name} onChange={handleChange} />
                 </label>
                 <label className="filter">
-                    Type:
-                    <select name="type" value={filters.type} onChange={handleChange}>
-                        <option value="">Any</option>
-                        <option value="environmental">Environmental</option>
-                        <option value="education">Education</option>
-                        <option value="healthcare">Healthcare</option>
+                    Event Urgency:
+                    <select name="urgency" value={filters.urgency} onChange={handleChange}>
+                        <option value="">All</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Critical">Critical</option>
                     </select>
                 </label>
             </div>
@@ -91,7 +92,7 @@ const VolunteerMatching = () => {
                     <h3>Potential Volunteers</h3>
                     <ul>
                         {volunteers.length === 0 && <li>No volunteers found.</li>}
-                        {/* to be replaced with data from a database */ volunteers.map((volunteer) => (
+                        {volunteers.map((volunteer) => (
                             <li key={volunteer.id}>
                                 <label>
                                     <input
@@ -99,7 +100,7 @@ const VolunteerMatching = () => {
                                         checked={selectedVolunteers.includes(volunteer.id)}
                                         onChange={() => handleCheckboxChange(volunteer.id)}
                                     />
-                                    <span>{` ${volunteer.name} - ${volunteer.skills}, ${volunteer.distance} mi`}</span>
+                                    <span>{` ${volunteer.name} - ${volunteer.skills}`}</span>
                                 </label>
                             </li>
                             ))}
@@ -108,13 +109,12 @@ const VolunteerMatching = () => {
 
                 <div className="opportunity-list">
                     <h3>Matching Opportunities</h3>
-                    {/* to be replaced with data from a database */}
                     <ul>
                         {events.length === 0 && <li>No opportunities found.</li>}
                         {events.map((event) => (
                             <li key={event.id}>
-                                {`Event ID ${event.id}: ${event.name} - ${event.location}, ${event.type}, 
-                                ${event.urgency}, ${event.distance} mi`}
+                                {`Event ID ${event.id}: ${event.name} - ${event.location}, 
+                                ${event.urgency}`}
                             </li>
                         ))}
                     </ul>
