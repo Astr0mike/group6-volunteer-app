@@ -17,6 +17,8 @@ function EventManagementForm() {
   const [skillsDropdownOpen, setSkillsDropdownOpen] = useState(false);
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editId, setEditId] = useState(null);
 
   const skillsOptions = [
     "Leadership",
@@ -105,8 +107,14 @@ function EventManagementForm() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/events', {
-        method: "POST",
+      const url = editMode
+        ? `http://localhost:3001/api/events/${editId}`
+        : `http://localhost:3001/api/events`;
+
+      const method = editMode ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -118,7 +126,7 @@ function EventManagementForm() {
       if (!response.ok) {
         setErrors(data.errors || {});
       } else {
-        alert(data.message || "Event Created Successfully!");
+        alert(data.message || (editMode ? "Event Updated!" : "Event Created!"));
         setFormData({
           eventName: "",
           eventDescription: "",
@@ -127,18 +135,19 @@ function EventManagementForm() {
           urgency: "",
           eventDate: "",
         });
+        setEditMode(false);
+        setEditId(null);
         setSkillsDropdownOpen(false);
         fetchEvents();
       }
     } catch (error) {
       console.error("Error submitting event:", error);
-      alert("An error occurred while creating the event. Please try again.");
+      alert("An error occurred. Please try again.");
     }
   };
 
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
-
     doc.setFontSize(18);
     doc.text("Event Report", 14, 20);
 
@@ -196,12 +205,45 @@ function EventManagementForm() {
     setSelectedEvent(null);
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this event?")) return;
+
+    try {
+      const res = await fetch(`http://localhost:3001/api/events/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+      alert(data.message || "Event deleted.");
+      fetchEvents();
+    } catch (err) {
+      console.error("Error deleting event:", err);
+      alert("Delete failed.");
+    }
+  };
+
+  const handleEdit = (event) => {
+    setFormData({
+      eventName: event.eventName,
+      eventDescription: event.eventDescription,
+      location: event.location,
+      requiredSkills: Array.isArray(event.requiredSkills)
+        ? event.requiredSkills
+        : event.requiredSkills.split(","),
+      urgency: event.urgency,
+      eventDate: new Date(event.eventDate).toISOString().split("T")[0],
+    });
+    setEditMode(true);
+    setEditId(event.id);
+    setSkillsDropdownOpen(false);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div>
-      <h2>Event Management Form</h2>
+      <h2>{editMode ? "Edit Event" : "Event Management Form"}</h2>
 
       <form onSubmit={handleSubmit}>
-        {/* Event Name */}
         <div>
           <label htmlFor="eventName">
             Event Name <span>*</span>
@@ -217,7 +259,6 @@ function EventManagementForm() {
           {errors.eventName && <p style={{ color: "red" }}>{errors.eventName}</p>}
         </div>
 
-        {/* Event Description */}
         <div>
           <label htmlFor="eventDescription">
             Event Description <span>*</span>
@@ -232,7 +273,6 @@ function EventManagementForm() {
           {errors.eventDescription && <p style={{ color: "red" }}>{errors.eventDescription}</p>}
         </div>
 
-        {/* Location */}
         <div>
           <label htmlFor="location">
             Location <span>*</span>
@@ -247,7 +287,6 @@ function EventManagementForm() {
           {errors.location && <p style={{ color: "red" }}>{errors.location}</p>}
         </div>
 
-        {/* Required Skills */}
         <div>
           <label>
             Required Skills <span>*</span> (Select all that apply)
@@ -276,7 +315,6 @@ function EventManagementForm() {
           {errors.requiredSkills && <p style={{ color: "red" }}>{errors.requiredSkills}</p>}
         </div>
 
-        {/* Urgency */}
         <div>
           <label htmlFor="urgency">
             Urgency <span>*</span>
@@ -297,7 +335,6 @@ function EventManagementForm() {
           {errors.urgency && <p style={{ color: "red" }}>{errors.urgency}</p>}
         </div>
 
-        {/* Event Date */}
         <div>
           <label htmlFor="eventDate">
             Event Date <span>*</span>
@@ -313,8 +350,28 @@ function EventManagementForm() {
           {errors.eventDate && <p style={{ color: "red" }}>{errors.eventDate}</p>}
         </div>
 
-        {/* Submit Button */}
-        <button type="submit">Create Event</button>
+        <button type="submit">{editMode ? "Update Event" : "Create Event"}</button>
+
+        {editMode && (
+          <button
+            type="button"
+            onClick={() => {
+              setEditMode(false);
+              setEditId(null);
+              setFormData({
+                eventName: "",
+                eventDescription: "",
+                location: "",
+                requiredSkills: [],
+                urgency: "",
+                eventDate: "",
+              });
+            }}
+            style={{ marginLeft: "10px", backgroundColor: "lightgray" }}
+          >
+            Cancel Edit
+          </button>
+        )}
       </form>
 
       <hr />
@@ -354,7 +411,9 @@ function EventManagementForm() {
                   <td>{event.urgency}</td>
                   <td>{new Date(event.eventDate).toLocaleDateString()}</td>
                   <td>
-                    <button onClick={() => handleViewDetails(event)}>View Details</button>
+                    <button onClick={() => handleViewDetails(event)}>View</button>{" "}
+                    <button onClick={() => handleEdit(event)}>Edit</button>{" "}
+                    <button onClick={() => handleDelete(event.id)}>Delete</button>
                   </td>
                 </tr>
               ))}
@@ -373,30 +432,12 @@ function EventManagementForm() {
           }}
         >
           <h3>Event Details</h3>
-          <p>
-            <strong>Name:</strong> {selectedEvent.eventName}
-          </p>
-          <p>
-            <strong>Description:</strong> {selectedEvent.eventDescription}
-          </p>
-          <p>
-            <strong>Location:</strong> {selectedEvent.location}
-          </p>
-          <p>
-            <strong>Required Skills:</strong>{" "}
-            {Array.isArray(selectedEvent.requiredSkills)
-              ? selectedEvent.requiredSkills.join(", ")
-              : selectedEvent.requiredSkills}
-          </p>
-          <p>
-            <strong>Urgency:</strong> {selectedEvent.urgency}
-          </p>
-          <p>
-            <strong>Date:</strong>{" "}
-            {Array.isArray(selectedEvent.eventDate)
-              ? selectedEvent.eventDate.join(", ")
-              : selectedEvent.eventDate}
-          </p>
+          <p><strong>Name:</strong> {selectedEvent.eventName}</p>
+          <p><strong>Description:</strong> {selectedEvent.eventDescription}</p>
+          <p><strong>Location:</strong> {selectedEvent.location}</p>
+          <p><strong>Required Skills:</strong> {Array.isArray(selectedEvent.requiredSkills) ? selectedEvent.requiredSkills.join(", ") : selectedEvent.requiredSkills}</p>
+          <p><strong>Urgency:</strong> {selectedEvent.urgency}</p>
+          <p><strong>Date:</strong> {Array.isArray(selectedEvent.eventDate) ? selectedEvent.eventDate.join(", ") : selectedEvent.eventDate}</p>
           <button onClick={handleCloseDetails}>Close Details</button>
         </div>
       )}
