@@ -1,5 +1,4 @@
 // src/App.js
-// src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Notifications from "./components/Notifications";
