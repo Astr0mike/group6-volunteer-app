@@ -1,4 +1,5 @@
 // src/App.js
+// src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Notifications from "./components/Notifications";
@@ -9,6 +10,7 @@ import EventManagementForm from "./components/EventManagementForm";
 import UserProfile from './components/UserProfile';
 import Register from './components/Register';
 import Login from './components/Login';
+import VolunteerEventsView from './components/VolunteerEventsView';
 import './App.css';
 
 function Navigation({ isLoggedIn, role, onLogout }) {
@@ -79,6 +81,7 @@ function App() {
                     <Route path="/volunteer-matching" element={<VolunteerMatching />} />
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path="/create-event" element={<EventManagementForm />} />
+                    <Route path="/events" element={<VolunteerEventsView />} /> 
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login onLogin={handleLogin}/>} />
