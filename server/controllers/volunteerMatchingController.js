@@ -1,7 +1,7 @@
 const db = require('../pool');
 
 const matchVolunteers = async (req, res) => {
-    const { skill, distance, type } = req.query;
+    const { skill, urgency, name } = req.query;
 
     try {
         // Fetch all volunteers
@@ -32,17 +32,9 @@ const matchVolunteers = async (req, res) => {
                 s.includes(skill.toLowerCase())
             );
 
-            const matchesDistance = !distance || parseInt(distance) >= 10; // placeholder for real distance
+            const matchesName = !name || volunteer.full_name.toLowerCase().includes(name.toLowerCase());
 
-            const matchesType = !type || events.some(event => {
-                const required = (event.requiredSkills || '')
-                    .split(',')
-                    .map(s => s.trim().toLowerCase());
-
-                return required.some(r => skillArray.includes(r));
-            });
-
-            return matchesSkill && matchesDistance && matchesType;
+            return matchesSkill && matchesName;
         });
 
         const matchedEvents = events.filter(event => {
@@ -50,10 +42,10 @@ const matchVolunteers = async (req, res) => {
                 .split(',')
                 .map(s => s.trim().toLowerCase());
 
-            const matchesType = !type || event.eventName.toLowerCase().includes(type.toLowerCase());
+            const matchesUrgency = !urgency || event.urgency?.trim().toLowerCase() === urgency.toLowerCase();
             const matchesSkill = !skill || required.some(s => s.includes(skill.toLowerCase()));
 
-            return matchesType && matchesSkill;
+            return matchesUrgency && matchesSkill;
         });
 
         const formattedVolunteers = matchedVolunteers.map(v => {
